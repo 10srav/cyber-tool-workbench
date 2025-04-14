@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				cyber: {
+					DEFAULT: '#0affed',
+					secondary: '#08c5ff',
+					accent: '#50fa7b',
+					muted: '#2d3748',
+					background: '#1a1f2c',
+					foreground: '#f8f8f2',
+					border: '#2d3748',
+					dark: '#10131a'
 				}
 			},
 			borderRadius: {
@@ -84,11 +95,33 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						boxShadow: '0 0 5px #0affed, 0 0 10px #0affed, 0 0 15px #0affed',
+						opacity: 1 
+					},
+					'50%': { 
+						boxShadow: '0 0 10px #0affed, 0 0 20px #0affed, 0 0 30px #0affed',
+						opacity: 0.8
+					}
+				},
+				'text-glow': {
+					'0%, 100%': { 
+						textShadow: '0 0 5px #0affed, 0 0 10px #0affed',
+						color: '#fff'
+					},
+					'50%': { 
+						textShadow: '0 0 2px #0affed, 0 0 5px #0affed',
+						color: '#d1fffe'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'text-glow': 'text-glow 2s ease-in-out infinite'
 			}
 		}
 	},
