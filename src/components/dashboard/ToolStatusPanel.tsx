@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, Globe, Database } from 'lucide-react';
+import { Users, Globe, Database, Search } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface ToolStatus {
@@ -25,7 +25,7 @@ const toolsData: ToolStatus[] = [
   {
     id: 2,
     name: 'endpoint_hunter.py',
-    status: 'warning',
+    status: 'online',
     lastUpdated: '15 min ago',
     usagePercentage: 45,
     icon: Globe
@@ -36,12 +36,12 @@ const toolsData: ToolStatus[] = [
     status: 'online',
     lastUpdated: '3 min ago',
     usagePercentage: 89,
-    icon: Globe
+    icon: Search
   },
   {
     id: 4,
     name: 'subdomain_extractor_new.py',
-    status: 'online',
+    status: 'warning',
     lastUpdated: '10 min ago',
     usagePercentage: 62,
     icon: Globe
@@ -49,9 +49,9 @@ const toolsData: ToolStatus[] = [
   {
     id: 5,
     name: 'sql.py',
-    status: 'offline',
+    status: 'online',
     lastUpdated: '1 hr ago',
-    usagePercentage: 0,
+    usagePercentage: 35,
     icon: Database
   }
 ];

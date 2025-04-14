@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +22,7 @@ const toolsList: Tool[] = [
   { 
     id: 'social_finder',
     name: 'Social_Finder.py', 
-    description: 'Find social media profiles for a target', 
+    description: 'Find and analyze social media profiles for a target', 
     category: 'social',
     command: 'python3 Social_Finder.py [TARGET_USERNAME]',
     icon: Users
@@ -31,33 +30,33 @@ const toolsList: Tool[] = [
   { 
     id: 'endpoint_hunter',
     name: 'endpoint_hunter.py', 
-    description: 'Discover hidden endpoints and APIs', 
+    description: 'Discover hidden endpoints and API paths', 
     category: 'reconnaissance',
-    command: 'python3 endpoint_hunter.py [TARGET_URL]',
+    command: 'python3 endpoint_hunter.py [TARGET_URL] [OUTPUT_FILE]',
     icon: Globe
   },
   { 
     id: 'subs_extractor',
     name: 'subs_Extractor.py', 
-    description: 'Extract subdomains from a target domain', 
+    description: 'Extract and validate subdomains from target domain', 
     category: 'reconnaissance',
-    command: 'python3 subs_Extractor.py [DOMAIN]',
+    command: 'python3 subs_Extractor.py [DOMAIN] [WORDLIST_PATH]',
     icon: Search
   },
   { 
     id: 'subdomain_extractor',
     name: 'subdomain_extractor_new.py', 
-    description: 'Advanced subdomain discovery tool', 
+    description: 'Advanced subdomain discovery and analysis tool', 
     category: 'reconnaissance',
-    command: 'python3 subdomain_extractor_new.py [DOMAIN] [WORDLIST]',
+    command: 'python3 subdomain_extractor_new.py [DOMAIN] [THREADS]',
     icon: Globe
   },
   { 
     id: 'sql',
     name: 'sql.py', 
-    description: 'SQL injection detection and exploitation', 
+    description: 'SQL injection vulnerability scanner', 
     category: 'exploitation',
-    command: 'python3 sql.py [TARGET_URL]',
+    command: 'python3 sql.py [TARGET_URL] [PARAMETER]',
     icon: Database
   }
 ];
