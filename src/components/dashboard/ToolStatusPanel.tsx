@@ -1,84 +1,104 @@
 
 import React from 'react';
-import { Shield, Code, Key, Database, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Shield, Terminal, AlertTriangle, Activity } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface ToolStatus {
+  id: number;
   name: string;
-  category: string;
   status: 'online' | 'offline' | 'warning';
-  uptime: number;
+  lastUpdated: string;
+  usagePercentage: number;
   icon: React.ElementType;
 }
 
-const toolsStatus: ToolStatus[] = [
-  { 
-    name: 'Nmap', 
-    category: 'Network',
+const toolsData: ToolStatus[] = [
+  {
+    id: 1,
+    name: 'Network Scanner',
     status: 'online',
-    uptime: 98,
+    lastUpdated: '5 min ago',
+    usagePercentage: 72,
     icon: Shield
   },
-  { 
-    name: 'SQLMap', 
-    category: 'Web',
-    status: 'online',
-    uptime: 100,
-    icon: Database
-  },
-  { 
-    name: 'Hashcat', 
-    category: 'Crypto',
+  {
+    id: 2,
+    name: 'Vulnerability Scanner',
     status: 'warning',
-    uptime: 87,
-    icon: Key
+    lastUpdated: '15 min ago',
+    usagePercentage: 45,
+    icon: AlertTriangle
   },
-  { 
-    name: 'Dirb', 
-    category: 'Web',
+  {
+    id: 3,
+    name: 'Packet Analyzer',
+    status: 'online',
+    lastUpdated: '3 min ago',
+    usagePercentage: 89,
+    icon: Terminal
+  },
+  {
+    id: 4,
+    name: 'System Monitor',
     status: 'offline',
-    uptime: 0,
-    icon: Code
-  },
+    lastUpdated: '1 hr ago',
+    usagePercentage: 0,
+    icon: Activity
+  }
 ];
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'online':
+      return 'text-green-500';
+    case 'warning':
+      return 'text-yellow-500';
+    case 'offline':
+      return 'text-red-500';
+    default:
+      return 'text-gray-500';
+  }
+};
+
+const getProgressColor = (percentage: number) => {
+  if (percentage >= 80) return 'bg-red-500';
+  if (percentage >= 50) return 'bg-yellow-500';
+  return 'bg-green-500';
+};
 
 const ToolStatusPanel: React.FC = () => {
   return (
     <div className="space-y-4">
-      {toolsStatus.map((tool) => (
-        <div key={tool.name} className="flex items-center justify-between py-2">
-          <div className="flex items-center">
-            <tool.icon className="h-5 w-5 mr-3 text-cyber" />
-            <div>
-              <p className="text-sm font-medium">{tool.name}</p>
-              <p className="text-xs text-muted-foreground">{tool.category}</p>
+      {toolsData.map(tool => (
+        <Card key={tool.id} className="hover:border-cyber transition-all duration-200 border-cyber-muted">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center">
+                <tool.icon className="h-5 w-5 mr-2 text-cyber" />
+                <span className="font-medium">{tool.name}</span>
+              </div>
+              <div className={`text-sm font-semibold ${getStatusColor(tool.status)}`}>
+                {tool.status.toUpperCase()}
+              </div>
             </div>
-          </div>
-          <div className="flex items-center">
-            <div className="w-24 mr-3">
+            
+            <div className="mt-3">
+              <div className="flex justify-between text-xs mb-1">
+                <span>Usage</span>
+                <span>{tool.usagePercentage}%</span>
+              </div>
               <Progress 
-                value={tool.uptime} 
-                className="h-2" 
-                indicatorClassName={
-                  tool.status === 'online' 
-                    ? 'bg-cyber' 
-                    : tool.status === 'warning' 
-                      ? 'bg-yellow-500' 
-                      : 'bg-red-500'
-                }
+                value={tool.usagePercentage} 
+                className="h-2 bg-gray-700"
               />
             </div>
-            {tool.status === 'online' && (
-              <CheckCircle className="h-5 w-5 text-cyber" />
-            )}
-            {tool.status === 'warning' && (
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
-            )}
-            {tool.status === 'offline' && (
-              <XCircle className="h-5 w-5 text-red-500" />
-            )}
-          </div>
-        </div>
+            
+            <div className="mt-2 text-xs text-muted-foreground">
+              Last updated: {tool.lastUpdated}
+            </div>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
             <SidebarMenu>
               {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild active={isActive(item.path)}>
+                  <SidebarMenuButton asChild isActive={isActive(item.path)}>
                     <Link to={item.path} className="flex items-center">
                       <item.icon className="h-5 w-5 mr-3" />
                       <span>{item.title}</span>
@@ -91,7 +91,7 @@ const Sidebar: React.FC = () => {
             <SidebarMenu>
               {toolsMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild active={isActive(item.path)}>
+                  <SidebarMenuButton asChild isActive={isActive(item.path)}>
                     <Link to={item.path} className="flex items-center">
                       <item.icon className="h-5 w-5 mr-3" />
                       <span>{item.title}</span>
