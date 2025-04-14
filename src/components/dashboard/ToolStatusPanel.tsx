@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, Globe, Database, Activity } from 'lucide-react';
+import { Users, Globe, Database } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface ToolStatus {
@@ -40,6 +40,14 @@ const toolsData: ToolStatus[] = [
   },
   {
     id: 4,
+    name: 'subdomain_extractor_new.py',
+    status: 'online',
+    lastUpdated: '10 min ago',
+    usagePercentage: 62,
+    icon: Globe
+  },
+  {
+    id: 5,
     name: 'sql.py',
     status: 'offline',
     lastUpdated: '1 hr ago',

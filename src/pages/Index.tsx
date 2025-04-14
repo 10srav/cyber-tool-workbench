@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, Terminal, AlertTriangle, Activity } from 'lucide-react';
+import { Shield, Terminal, AlertTriangle, Activity, Users, Globe, Database } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Link } from 'react-router-dom';
 import RecentScanChart from '@/components/dashboard/RecentScanChart';
@@ -20,8 +20,8 @@ const Dashboard = () => {
               <Terminal className="h-4 w-4 text-cyber" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-foreground">24</div>
-              <p className="text-xs text-muted-foreground">+2 added recently</p>
+              <div className="text-2xl font-bold text-cyber-foreground">5</div>
+              <p className="text-xs text-muted-foreground">All tools ready</p>
             </CardContent>
           </Card>
           
@@ -31,8 +31,8 @@ const Dashboard = () => {
               <Activity className="h-4 w-4 text-cyber" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-foreground">3</div>
-              <p className="text-xs text-muted-foreground">2 will complete soon</p>
+              <div className="text-2xl font-bold text-cyber-foreground">2</div>
+              <p className="text-xs text-muted-foreground">1 will complete soon</p>
             </CardContent>
           </Card>
           
@@ -42,8 +42,8 @@ const Dashboard = () => {
               <Shield className="h-4 w-4 text-cyber" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-foreground">17</div>
-              <p className="text-xs text-muted-foreground">5 need attention</p>
+              <div className="text-2xl font-bold text-cyber-foreground">3</div>
+              <p className="text-xs text-muted-foreground">All secure</p>
             </CardContent>
           </Card>
           
@@ -53,8 +53,8 @@ const Dashboard = () => {
               <AlertTriangle className="h-4 w-4 text-cyber" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-foreground">7</div>
-              <p className="text-xs text-muted-foreground">2 critical threats</p>
+              <div className="text-2xl font-bold text-cyber-foreground">1</div>
+              <p className="text-xs text-muted-foreground">Low severity</p>
             </CardContent>
           </Card>
         </div>
@@ -93,9 +93,11 @@ const Dashboard = () => {
                     <div className={`w-2 h-2 rounded-full mr-2 ${i % 3 === 0 ? 'bg-red-500' : i % 3 === 1 ? 'bg-cyber' : 'bg-yellow-500'}`}></div>
                     <div className="flex-1">
                       <p className="text-sm">
-                        {i % 3 === 0 ? 'Critical vulnerability detected in web scan' :
-                          i % 3 === 1 ? 'Network scan completed successfully' :
-                            'Warning: Unusual activity detected'}
+                        {i === 1 ? 'Social_Finder.py scan completed successfully' :
+                          i === 2 ? 'endpoint_hunter.py detected new endpoints' :
+                          i === 3 ? 'Warning: SQL injection vulnerability found by sql.py' :
+                          i === 4 ? 'subs_Extractor.py discovered 3 new subdomains' :
+                          'subdomain_extractor_new.py scan started'}
                       </p>
                       <p className="text-xs text-muted-foreground">{new Date().toLocaleTimeString()}</p>
                     </div>
@@ -114,14 +116,14 @@ const Dashboard = () => {
                 <Link to="/tools" className="cyber-button w-full text-center">
                   Launch Tool
                 </Link>
-                <Link to="/vulnerabilities" className="cyber-button w-full text-center">
-                  View Vulnerabilities
+                <Link to="/tools/social" className="cyber-button w-full text-center">
+                  Social Tools
                 </Link>
-                <Link to="/tools/network" className="cyber-button w-full text-center">
-                  Network Scan
+                <Link to="/tools/reconnaissance" className="cyber-button w-full text-center">
+                  Reconnaissance Tools
                 </Link>
-                <Link to="/results" className="cyber-button w-full text-center">
-                  View Results
+                <Link to="/tools/exploitation" className="cyber-button w-full text-center">
+                  Exploitation Tools
                 </Link>
               </div>
             </CardContent>

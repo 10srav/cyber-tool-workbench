@@ -37,7 +37,6 @@ const mainMenuItems: MenuItem[] = [
   { title: 'Tool Execution', icon: Terminal, path: '/tools' },
   { title: 'Scan Results', icon: Search, path: '/results' },
   { title: 'Vulnerabilities', icon: AlertTriangle, path: '/vulnerabilities' },
-  { title: 'Analytics', icon: BarChart2, path: '/analytics' },
 ];
 
 const toolsMenuItems: MenuItem[] = [
