@@ -17,7 +17,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/tools" element={<Tools />} />
-          <Route path="/tools/:category" element={<Tools />} />
+          <Route path="/tools/social" element={<Tools />} />
+          <Route path="/tools/reconnaissance" element={<Tools />} />
+          <Route path="/tools/exploitation" element={<Tools />} />
           {/* Placeholder routes that would be implemented as needed */}
           <Route path="/results" element={<Tools />} />
           <Route path="/vulnerabilities" element={<Tools />} />

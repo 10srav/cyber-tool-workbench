@@ -3,15 +3,13 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Activity, 
-  Shield, 
+  Globe, 
   Terminal, 
   Database, 
   AlertTriangle, 
   Search,
   LucideIcon,
-  Code,
-  Key,
-  Lock,
+  Users,
   BarChart2
 } from 'lucide-react';
 
@@ -43,11 +41,9 @@ const mainMenuItems: MenuItem[] = [
 ];
 
 const toolsMenuItems: MenuItem[] = [
-  { title: 'Network Tools', icon: Shield, path: '/tools/network' },
-  { title: 'Web Tools', icon: Code, path: '/tools/web' },
-  { title: 'Crypto Tools', icon: Key, path: '/tools/crypto' },
-  { title: 'Forensics', icon: Search, path: '/tools/forensics' },
-  { title: 'Database', icon: Database, path: '/tools/database' },
+  { title: 'Social Tools', icon: Users, path: '/tools/social' },
+  { title: 'Reconnaissance Tools', icon: Globe, path: '/tools/reconnaissance' },
+  { title: 'Exploitation Tools', icon: Database, path: '/tools/exploitation' },
 ];
 
 const Sidebar: React.FC = () => {
@@ -61,8 +57,8 @@ const Sidebar: React.FC = () => {
     <SidebarComponent>
       <SidebarHeader className="px-4 py-2">
         <Link to="/" className="flex items-center">
-          <Lock className="h-8 w-8 text-cyber animate-pulse-glow" />
-          <span className="ml-2 text-xl font-semibold animate-text-glow">CyberToolKit</span>
+          <Users className="h-8 w-8 text-cyber animate-pulse-glow" />
+          <span className="ml-2 text-xl font-semibold animate-text-glow">SocialCyberKit</span>
         </Link>
       </SidebarHeader>
       
@@ -106,7 +102,7 @@ const Sidebar: React.FC = () => {
       
       <SidebarFooter className="px-3 py-2 border-t border-cyber-muted">
         <div className="flex items-center justify-center">
-          <span className="text-xs text-cyber-foreground/50">© 2025 CyberToolKit</span>
+          <span className="text-xs text-cyber-foreground/50">© 2025 SocialCyberKit</span>
         </div>
       </SidebarFooter>
     </SidebarComponent>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Terminal, AlertTriangle, Activity } from 'lucide-react';
+import { Users, Globe, Database, Activity } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface ToolStatus {
@@ -16,35 +16,35 @@ interface ToolStatus {
 const toolsData: ToolStatus[] = [
   {
     id: 1,
-    name: 'Network Scanner',
+    name: 'Social_Finder.py',
     status: 'online',
     lastUpdated: '5 min ago',
     usagePercentage: 72,
-    icon: Shield
+    icon: Users
   },
   {
     id: 2,
-    name: 'Vulnerability Scanner',
+    name: 'endpoint_hunter.py',
     status: 'warning',
     lastUpdated: '15 min ago',
     usagePercentage: 45,
-    icon: AlertTriangle
+    icon: Globe
   },
   {
     id: 3,
-    name: 'Packet Analyzer',
+    name: 'subs_Extractor.py',
     status: 'online',
     lastUpdated: '3 min ago',
     usagePercentage: 89,
-    icon: Terminal
+    icon: Globe
   },
   {
     id: 4,
-    name: 'System Monitor',
+    name: 'sql.py',
     status: 'offline',
     lastUpdated: '1 hr ago',
     usagePercentage: 0,
-    icon: Activity
+    icon: Database
   }
 ];
 
