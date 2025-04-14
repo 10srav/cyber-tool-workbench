@@ -99,6 +99,7 @@ const ToolStatusPanel: React.FC = () => {
               <Progress 
                 value={tool.usagePercentage} 
                 className="h-2 bg-gray-700"
+                indicatorClassName={getProgressColor(tool.usagePercentage)}
               />
             </div>
             

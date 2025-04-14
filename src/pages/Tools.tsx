@@ -1,22 +1,14 @@
+
 import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Terminal, Users, Globe, Database, Search, Play, Clock, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Terminal, Users, Globe, Database, Search, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import ToolInterface from '@/components/tools/ToolInterface';
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  category: 'social' | 'reconnaissance' | 'exploitation';
-  command: string;
-  icon: React.ElementType;
-}
+import ToolsList from '@/components/tools/ToolsList';
+import ToolUsageGuideDialog from '@/components/tools/ToolUsageGuideDialog';
+import { Tool } from '@/types/tools';
 
 const toolsList: Tool[] = [
   { 
@@ -91,109 +83,18 @@ const Tools = () => {
     }, 3000);
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'social': return Users;
-      case 'reconnaissance': return Globe;
-      case 'exploitation': return Database;
-      default: return Terminal;
-    }
-  };
-
   return (
     <MainLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-cyber">Social Cyber Tools</h1>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-cyber hover:bg-cyber/80 text-cyber-dark">
-                <Info className="mr-2 h-4 w-4" />
-                Tool Usage Guide
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-cyber-dark border-cyber">
-              <DialogHeader>
-                <DialogTitle className="text-cyber">Tool Usage Guide</DialogTitle>
-                <DialogDescription>
-                  Learn how to effectively use the social cyber tools in this interface.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-sm font-medium text-cyber mb-1">1. Select a Tool</h4>
-                  <p className="text-sm text-cyber-foreground">Choose from our specialized social reconnaissance tools.</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-cyber mb-1">2. Configure Parameters</h4>
-                  <p className="text-sm text-cyber-foreground">Modify the command parameters with your target information.</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-cyber mb-1">3. Execute and Monitor</h4>
-                  <p className="text-sm text-cyber-foreground">Run the tool and monitor its progress in the terminal window.</p>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button className="bg-cyber hover:bg-cyber/80 text-cyber-dark">Got it</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <ToolUsageGuideDialog />
         </div>
         
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList className="bg-cyber-dark">
-            <TabsTrigger value="all" className="data-[state=active]:bg-cyber data-[state=active]:text-cyber-dark">
-              All Tools
-            </TabsTrigger>
-            <TabsTrigger value="social" className="data-[state=active]:bg-cyber data-[state=active]:text-cyber-dark">
-              Social
-            </TabsTrigger>
-            <TabsTrigger value="reconnaissance" className="data-[state=active]:bg-cyber data-[state=active]:text-cyber-dark">
-              Reconnaissance
-            </TabsTrigger>
-            <TabsTrigger value="exploitation" className="data-[state=active]:bg-cyber data-[state=active]:text-cyber-dark">
-              Exploitation
-            </TabsTrigger>
-          </TabsList>
-          
-          {['all', 'social', 'reconnaissance', 'exploitation'].map((category) => (
-            <TabsContent key={category} value={category} className="mt-4">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {toolsList
-                  .filter(tool => category === 'all' || tool.category === category)
-                  .map((tool) => {
-                    const CategoryIcon = getCategoryIcon(tool.category);
-                    return (
-                      <Card key={tool.id} className="bg-cyber-dark border-cyber hover:shadow-md hover:shadow-cyber/20 transition-all">
-                        <CardHeader className="flex flex-row items-start justify-between pb-2">
-                          <div>
-                            <CardTitle className="text-lg font-medium text-cyber">{tool.name}</CardTitle>
-                            <CardDescription className="text-sm mt-1">{tool.description}</CardDescription>
-                          </div>
-                          <Badge className="bg-cyber text-cyber-dark font-semibold">{tool.category}</Badge>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="flex items-center bg-cyber-background p-2 rounded font-mono text-xs overflow-x-auto">
-                            <CategoryIcon className="h-4 w-4 mr-2 text-cyber" />
-                            <code>{tool.command}</code>
-                          </div>
-                        </CardContent>
-                        <CardFooter>
-                          <Button 
-                            className="w-full bg-cyber hover:bg-cyber/80 text-cyber-dark"
-                            onClick={() => handleRunTool(tool)}
-                          >
-                            <Play className="mr-2 h-4 w-4" />
-                            Run Tool
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    );
-                  })}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+        <ToolsList 
+          toolsList={toolsList}
+          onRunTool={handleRunTool}
+        />
         
         {selectedTool && (
           <Card className="mt-6 bg-cyber-dark border-cyber">
@@ -212,7 +113,6 @@ const Tools = () => {
                   ) : "Ready"}
                 </Badge>
               </div>
-              <CardDescription>Configure and execute {selectedTool.name}</CardDescription>
             </CardHeader>
             <CardContent>
               <ToolInterface 
