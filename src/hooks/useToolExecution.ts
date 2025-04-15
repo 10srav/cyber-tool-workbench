@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { mockToolExecution } from '@/services/mockToolService';
+import { executeToolFunction } from '@/services/toolService';
 import { useToast } from '@/hooks/use-toast';
 
 export const useToolExecution = () => {
@@ -13,7 +13,7 @@ export const useToolExecution = () => {
     setResult(null);
     
     try {
-      const response = await mockToolExecution(toolId, target);
+      const response = await executeToolFunction(toolId, target);
       
       if (response.success) {
         setResult(response.data);
