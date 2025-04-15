@@ -4,7 +4,6 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Terminal, Users, Globe, Database, Search, Clock } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import ToolInterface from '@/components/tools/ToolInterface';
 import ToolsList from '@/components/tools/ToolsList';
 import ToolUsageGuideDialog from '@/components/tools/ToolUsageGuideDialog';
@@ -24,7 +23,7 @@ const toolsList: Tool[] = [
     name: 'endpoint_hunter.py', 
     description: 'Discover hidden endpoints and API paths', 
     category: 'reconnaissance',
-    command: 'python3 endpoint_hunter.py [TARGET_URL] [OUTPUT_FILE]',
+    command: 'python3 endpoint_hunter.py [TARGET_URL]',
     icon: Globe
   },
   { 
@@ -32,7 +31,7 @@ const toolsList: Tool[] = [
     name: 'subs_Extractor.py', 
     description: 'Extract and validate subdomains from target domain', 
     category: 'reconnaissance',
-    command: 'python3 subs_Extractor.py [DOMAIN] [WORDLIST_PATH]',
+    command: 'python3 subs_Extractor.py [DOMAIN]',
     icon: Search
   },
   { 
@@ -40,7 +39,7 @@ const toolsList: Tool[] = [
     name: 'subdomain_extractor_new.py', 
     description: 'Advanced subdomain discovery and analysis tool', 
     category: 'reconnaissance',
-    command: 'python3 subdomain_extractor_new.py [DOMAIN] [THREADS]',
+    command: 'python3 subdomain_extractor_new.py [DOMAIN]',
     icon: Globe
   },
   { 
@@ -48,39 +47,16 @@ const toolsList: Tool[] = [
     name: 'sql.py', 
     description: 'SQL injection vulnerability scanner', 
     category: 'exploitation',
-    command: 'python3 sql.py [TARGET_URL] [PARAMETER]',
+    command: 'python3 sql.py [TARGET_URL]',
     icon: Database
   }
 ];
 
 const Tools = () => {
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const { toast } = useToast();
 
   const handleRunTool = (tool: Tool) => {
     setSelectedTool(tool);
-  };
-
-  const handleExecute = () => {
-    if (!selectedTool) return;
-    
-    setIsRunning(true);
-    toast({
-      title: "Tool Execution Started",
-      description: `Running ${selectedTool.name}...`,
-      duration: 3000,
-    });
-    
-    // Simulate tool execution
-    setTimeout(() => {
-      setIsRunning(false);
-      toast({
-        title: "Tool Execution Completed",
-        description: `${selectedTool.name} completed successfully!`,
-        duration: 3000,
-      });
-    }, 3000);
   };
 
   return (
@@ -104,22 +80,11 @@ const Tools = () => {
                   <selectedTool.icon className="h-5 w-5 mr-2" />
                   {selectedTool.name} Interface
                 </CardTitle>
-                <Badge className="bg-cyber-muted text-cyber">
-                  {isRunning ? (
-                    <div className="flex items-center">
-                      <Clock className="h-3 w-3 mr-1 animate-spin" />
-                      Running...
-                    </div>
-                  ) : "Ready"}
-                </Badge>
+                <Badge className="bg-cyber-muted text-cyber">Tool Interface</Badge>
               </div>
             </CardHeader>
             <CardContent>
-              <ToolInterface 
-                tool={selectedTool} 
-                isRunning={isRunning} 
-                onExecute={handleExecute} 
-              />
+              <ToolInterface tool={selectedTool} />
             </CardContent>
           </Card>
         )}

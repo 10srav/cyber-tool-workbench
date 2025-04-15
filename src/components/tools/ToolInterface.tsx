@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Play, Save, Clock, Download } from 'lucide-react';
+import { Play, Save, Clock, Download, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToolExecution } from '@/hooks/useToolExecution';
 import { Tool } from '@/types/tools';
@@ -43,7 +43,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool }) => {
       ));
     }
 
-    return <pre className="text-sm text-cyber-foreground">{JSON.stringify(result, null, 2)}</pre>;
+    return <pre className="text-sm text-cyber-foreground whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>;
   };
 
   return (
@@ -68,7 +68,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool }) => {
       <div className="space-y-2">
         <div className="font-semibold text-cyber mb-1">Command</div>
         <div className="flex items-center space-x-2">
-          <div className="cyber-terminal font-mono text-sm flex-1">
+          <div className="cyber-terminal font-mono text-sm flex-1 p-2 bg-cyber-dark/30 rounded border border-cyber/20">
             {command}
           </div>
           <Badge className={`${isExecuting ? 'bg-yellow-600' : 'bg-cyber'} text-cyber-dark`}>
@@ -85,7 +85,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool }) => {
       <div className="space-y-2">
         <div className="font-semibold text-cyber mb-1">Output</div>
         <Textarea
-          className="cyber-terminal font-mono text-sm h-64"
+          className="cyber-terminal font-mono text-sm h-64 bg-cyber-dark/30 border-cyber/20"
           placeholder="Tool output will appear here..."
           value={result ? JSON.stringify(result, null, 2) : ''}
           readOnly

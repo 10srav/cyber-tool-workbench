@@ -14,11 +14,11 @@ export const mockToolExecution = async (toolId: string, target: string): Promise
       return {
         success: true,
         data: [
-          'https://example.com/api/v1/users',
-          'https://example.com/api/v1/products',
-          'https://example.com/login',
-          'https://example.com/signup',
-          'https://api.example.com/graphql'
+          `https://${target}/api/v1/users`,
+          `https://${target}/api/v1/products`,
+          `https://${target}/login`,
+          `https://${target}/signup`,
+          `https://api.${target}/graphql`
         ]
       };
 
@@ -47,11 +47,37 @@ export const mockToolExecution = async (toolId: string, target: string): Promise
           `test.${target}`
         ]
       };
+      
+    case 'social_finder':
+      return {
+        success: true,
+        data: [
+          {
+            platform: "Twitter",
+            username: target,
+            url: `https://twitter.com/${target}`,
+            followers: Math.floor(Math.random() * 10000)
+          },
+          {
+            platform: "Instagram",
+            username: target,
+            url: `https://instagram.com/${target}`,
+            followers: Math.floor(Math.random() * 5000)
+          },
+          {
+            platform: "GitHub",
+            username: target,
+            url: `https://github.com/${target}`,
+            repos: Math.floor(Math.random() * 50)
+          }
+        ]
+      };
 
     default:
       return {
         success: false,
-        error: 'Tool not implemented'
+        data: null,
+        error: 'Tool not implemented or unavailable'
       };
   }
 };
