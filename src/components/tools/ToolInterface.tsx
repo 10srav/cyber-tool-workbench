@@ -5,77 +5,45 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Play, Save, Clock, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  command: string;
-  icon: React.ElementType;
-}
+import { useToolExecution } from '@/hooks/useToolExecution';
+import { Tool } from '@/types/tools';
 
 interface ToolInterfaceProps {
   tool: Tool;
-  isRunning: boolean;
-  onExecute: () => void;
 }
 
-const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecute }) => {
+const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool }) => {
   const [command, setCommand] = useState(tool.command);
-  const [output, setOutput] = useState<string>('');
+  const { isExecuting, result, executeTool } = useToolExecution();
 
   // Parse the command and identify placeholders
   const parsedCommand = tool.command.match(/\[(.*?)\]/g) || [];
   const parameters = parsedCommand.map(param => param.replace(/[\[\]]/g, ''));
+  const [target, setTarget] = useState('');
 
   const handleParameterChange = (origParam: string, value: string) => {
+    setTarget(value);
     const placeholder = `[${origParam}]`;
     setCommand(prev => prev.replace(placeholder, value ? `[${value}]` : placeholder));
   };
 
   const handleExecuteClick = () => {
-    // Simulate command execution
-    setOutput('');
-    onExecute();
-    
-    // Generate fake output based on the tool
-    setTimeout(() => {
-      let fakeOutput = '';
-      
-      switch (tool.id) {
-        case 'nmap':
-          fakeOutput = `Starting Nmap scan...\n`;
-          fakeOutput += `Scanning target...\n`;
-          fakeOutput += `PORT     STATE  SERVICE        VERSION\n`;
-          fakeOutput += `22/tcp   open   ssh            OpenSSH 8.2p1\n`;
-          fakeOutput += `80/tcp   open   http           nginx 1.18.0\n`;
-          fakeOutput += `443/tcp  open   https          nginx 1.18.0\n`;
-          fakeOutput += `3306/tcp open   mysql          MySQL 5.7.32\n`;
-          fakeOutput += `Nmap scan completed in 12.45 seconds\n`;
-          break;
-        case 'sqlmap':
-          fakeOutput = `Starting sqlmap scan...\n`;
-          fakeOutput += `Testing connection to the target URL\n`;
-          fakeOutput += `Checking for SQL injection vulnerabilities\n`;
-          fakeOutput += `[INFO] testing 'MySQL >= 5.0.12 AND time-based blind'\n`;
-          fakeOutput += `[INFO] testing 'MySQL > 5.0.11 stacked queries'\n`;
-          fakeOutput += `[CRITICAL] SQL injection vulnerability found!\n`;
-          fakeOutput += `Available databases: [5]:\n`;
-          fakeOutput += `[*] information_schema\n`;
-          fakeOutput += `[*] mysql\n`;
-          fakeOutput += `[*] performance_schema\n`;
-          fakeOutput += `[*] sys\n`;
-          fakeOutput += `[*] webapp_db\n`;
-          break;
-        default:
-          fakeOutput = `Executing ${tool.name}...\n`;
-          fakeOutput += `Command completed successfully!\n`;
-          fakeOutput += `Check results in the output window.\n`;
-      }
-      
-      setOutput(fakeOutput);
-    }, 3000);
+    if (!target) return;
+    executeTool(tool.id, target);
+  };
+
+  const renderResults = () => {
+    if (!result) return null;
+
+    if (Array.isArray(result)) {
+      return result.map((item, index) => (
+        <div key={index} className="text-sm text-cyber-foreground">
+          {typeof item === 'string' ? item : JSON.stringify(item, null, 2)}
+        </div>
+      ));
+    }
+
+    return <pre className="text-sm text-cyber-foreground">{JSON.stringify(result, null, 2)}</pre>;
   };
 
   return (
@@ -90,7 +58,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecut
                 placeholder={`Enter ${param}`}
                 className="cyber-input"
                 onChange={(e) => handleParameterChange(param, e.target.value)}
-                disabled={isRunning}
+                disabled={isExecuting}
               />
             </div>
           ))}
@@ -103,8 +71,8 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecut
           <div className="cyber-terminal font-mono text-sm flex-1">
             {command}
           </div>
-          <Badge className={`${isRunning ? 'bg-yellow-600' : 'bg-cyber'} text-cyber-dark`}>
-            {isRunning ? (
+          <Badge className={`${isExecuting ? 'bg-yellow-600' : 'bg-cyber'} text-cyber-dark`}>
+            {isExecuting ? (
               <span className="flex items-center">
                 <Clock className="h-3 w-3 mr-1 animate-spin" />
                 Running
@@ -119,7 +87,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecut
         <Textarea
           className="cyber-terminal font-mono text-sm h-64"
           placeholder="Tool output will appear here..."
-          value={output}
+          value={result ? JSON.stringify(result, null, 2) : ''}
           readOnly
         />
       </div>
@@ -133,7 +101,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecut
           <Button 
             variant="outline" 
             className="border-cyber text-cyber hover:bg-cyber hover:text-cyber-dark"
-            disabled={!output}
+            disabled={!result}
           >
             <Download className="h-4 w-4 mr-2" />
             Export Results
@@ -141,10 +109,10 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ tool, isRunning, onExecut
         </div>
         <Button 
           className="bg-cyber hover:bg-cyber/80 text-cyber-dark"
-          disabled={isRunning}
+          disabled={isExecuting || !target}
           onClick={handleExecuteClick}
         >
-          {isRunning ? (
+          {isExecuting ? (
             <>
               <Clock className="mr-2 h-4 w-4 animate-spin" />
               Running...
