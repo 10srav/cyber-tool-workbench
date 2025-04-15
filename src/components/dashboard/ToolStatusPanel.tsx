@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Users, Globe, Database, Search } from 'lucide-react';
@@ -98,8 +97,7 @@ const ToolStatusPanel: React.FC = () => {
               </div>
               <Progress 
                 value={tool.usagePercentage} 
-                className="h-2 bg-gray-700"
-                indicatorClassName={getProgressColor(tool.usagePercentage)}
+                className={`h-2 bg-gray-700 ${getProgressColor(tool.usagePercentage)}`}
               />
             </div>
             
