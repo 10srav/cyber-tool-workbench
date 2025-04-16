@@ -5,8 +5,9 @@ import subprocess
 import os
 import json
 from pydantic import BaseModel
-import shlex
 from typing import Dict, Any, List, Optional
+import sys
+import importlib.util
 
 app = FastAPI(title="Cyber Tools API")
 
@@ -39,11 +40,28 @@ def verify_api_key(request: Request):
 class ToolRequest(BaseModel):
     target: str
 
+def import_tool(tool_name: str):
+    """Dynamically import a Python tool from the tools directory."""
+    try:
+        tool_path = os.path.join("tools", f"{tool_name}.py")
+        spec = importlib.util.spec_from_file_location(tool_name, tool_path)
+        if spec is None:
+            raise ImportError(f"Could not load spec for {tool_name}")
+        
+        module = importlib.util.module_from_spec(spec)
+        if spec.loader is None:
+            raise ImportError(f"Could not load {tool_name}")
+            
+        spec.loader.exec_module(module)
+        return module
+    except Exception as e:
+        print(f"Error importing tool {tool_name}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to import tool: {str(e)}")
+
 @app.get("/")
 async def root():
     return {"message": "Cyber Tools API is running"}
 
-# Tool execution endpoint
 @app.post("/api/tools/{tool_id}")
 async def execute_tool(
     tool_id: str,
@@ -52,61 +70,40 @@ async def execute_tool(
 ):
     try:
         target = request.target
+        print(f"Executing tool {tool_id} with target: {target}")
         
-        # Define command mapping based on tool_id
-        commands = {
-            "social_finder": ["python3", "tools/Social_Finder.py", target],
-            "endpoint_hunter": ["python3", "tools/endpoint_hunter.py", target],
-            "subs_extractor": ["python3", "tools/subs_Extractor.py", target],
-            "subdomain_extractor": ["python3", "tools/subdomain_extractor_new.py", target],
-            "sql": ["python3", "tools/sql.py", target],
+        # Map tool_id to actual Python files
+        tool_mapping = {
+            "social_finder": "Social_Finder",
+            "endpoint_hunter": "endpoint_hunter",
+            "subs_extractor": "subs_Extractor",
+            "subdomain_extractor": "subdomain_extractor_new",
+            "sql": "sql"
         }
         
-        if tool_id not in commands:
+        if tool_id not in tool_mapping:
             raise HTTPException(status_code=404, detail=f"Tool '{tool_id}' not found")
+            
+        tool_name = tool_mapping[tool_id]
+        tool_module = import_tool(tool_name)
         
-        # Execute the command
-        print(f"Executing tool: {tool_id} with target: {target}")
-        result = execute_command(commands[tool_id])
-        
+        # Execute the main function of the tool
+        if hasattr(tool_module, 'main'):
+            result = tool_module.main(target)
+        else:
+            raise HTTPException(status_code=500, detail=f"Tool {tool_id} does not have a main function")
+            
         return {
             "success": True,
             "data": result
         }
+        
     except Exception as e:
         print(f"Error executing tool {tool_id}: {str(e)}")
         return {
             "success": False,
             "error": str(e)
         }
-
-def execute_command(command: List[str]) -> Dict[str, Any]:
-    """Execute a shell command and return its output."""
-    try:
-        # For security, make sure to validate and sanitize inputs before execution
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        
-        # Try to parse output as JSON if possible
-        try:
-            return json.loads(result.stdout)
-        except json.JSONDecodeError:
-            # If not JSON, return as structured text
-            lines = result.stdout.strip().split('\n')
-            return {
-                "raw_output": lines
-            }
-            
-    except subprocess.CalledProcessError as e:
-        print(f"Command execution failed: {e}")
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Tool execution failed: {e.stderr}"
-        )
 
 if __name__ == "__main__":
     import uvicorn
