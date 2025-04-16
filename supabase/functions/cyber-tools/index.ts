@@ -10,14 +10,15 @@ const corsHeaders = {
 async function executePythonTool(toolId: string, target: string) {
   console.log(`Executing Python tool: ${toolId} with target: ${target}`);
   
-  // Replace this URL with your Python backend URL
-  const PYTHON_BACKEND_URL = "https://your-python-backend.com";
+  // Python backend API URL - replace with your actual deployed Python API URL
+  const PYTHON_BACKEND_URL = Deno.env.get("PYTHON_BACKEND_URL") || "http://localhost:8000";
   
   try {
     const response = await fetch(`${PYTHON_BACKEND_URL}/api/tools/${toolId}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Deno.env.get("PYTHON_API_KEY") || "default-key"}`
       },
       body: JSON.stringify({ target })
     });
