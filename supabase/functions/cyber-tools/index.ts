@@ -6,17 +6,15 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Function to execute Python tools via system commands
+// Function to execute Python tools via API calls
 async function executePythonTool(toolId: string, target: string) {
-  console.log(`Attempting to execute Python tool: ${toolId} with target: ${target}`);
+  console.log(`Executing Python tool: ${toolId} with target: ${target}`);
+  
+  // Replace this URL with your Python backend URL
+  const PYTHON_BACKEND_URL = "https://your-python-backend.com";
   
   try {
-    // In Deno/Edge environment, we need to use a different approach than direct Python execution
-    // For now, we'll implement API calls to your Python backend
-    
-    // This is where we would call your Python backend API
-    // Example implementation:
-    const response = await fetch(`https://your-python-backend.com/api/tools/${toolId}`, {
+    const response = await fetch(`${PYTHON_BACKEND_URL}/api/tools/${toolId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -46,59 +44,8 @@ serve(async (req) => {
     const { toolId, target } = await req.json();
     console.log(`Received request to execute tool ${toolId} with target ${target}`);
 
-    let result;
-    try {
-      // Attempt to execute the actual Python tool
-      result = await executePythonTool(toolId, target);
-    } catch (toolError) {
-      console.error(`Failed to execute Python tool directly: ${toolError.message}`);
-      console.error(`Falling back to simulation for demonstration purposes`);
-      
-      // Fallback to simulation for demonstration (you'll replace this later)
-      switch (toolId) {
-        case 'endpoint_hunter':
-          result = {
-            success: true,
-            endpoints: [
-              `https://${target}/api/v1`,
-              `https://${target}/graphql`,
-              `https://${target}/login`,
-              `https://${target}/admin`
-            ],
-            note: "SIMULATION MODE - Connect your Python backend for real results"
-          };
-          break;
-        case 'subs_extractor':
-        case 'subdomain_extractor':
-          result = { 
-            success: true, 
-            subdomains: [
-              `admin.${target}`,
-              `api.${target}`,
-              `dev.${target}`,
-              `staging.${target}`
-            ],
-            note: "SIMULATION MODE - Connect your Python backend for real results"
-          };
-          break;
-        case 'sql':
-          result = {
-            success: true,
-            vulnerabilities: [
-              {
-                url: target,
-                vulnerable: true,
-                payloads: ["' OR '1'='1", "' UNION SELECT * FROM users--"],
-                evidence: "SQL syntax detected in URL parameters"
-              }
-            ],
-            note: "SIMULATION MODE - Connect your Python backend for real results"
-          };
-          break;
-        default:
-          throw new Error('Invalid tool ID');
-      }
-    }
+    // Execute the Python tool and return real results
+    const result = await executePythonTool(toolId, target);
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
