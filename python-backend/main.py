@@ -90,8 +90,16 @@ async def execute_tool(
         # Execute the main function of the tool
         if hasattr(tool_module, 'main'):
             result = tool_module.main(target)
+        elif hasattr(tool_module, 'extract_social_links') and tool_id == 'social_finder':
+            result = tool_module.extract_social_links(target)
+        elif hasattr(tool_module, 'extract_subdomains') and tool_id in ['subdomain_extractor', 'subs_extractor']:
+            result = tool_module.extract_subdomains(target)
+        elif hasattr(tool_module, 'find_endpoints') and tool_id == 'endpoint_hunter':
+            result = tool_module.find_endpoints(target)
+        elif hasattr(tool_module, 'run_sql_tool') and tool_id == 'sql':
+            result = tool_module.run_sql_tool(target)
         else:
-            raise HTTPException(status_code=500, detail=f"Tool {tool_id} does not have a main function")
+            raise HTTPException(status_code=500, detail=f"Tool {tool_id} does not have a compatible main function")
             
         return {
             "success": True,

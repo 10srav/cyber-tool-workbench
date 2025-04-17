@@ -1,13 +1,14 @@
 
-# Cyber Tools
+# Python Cyber Tools
 
-Place your Python tools in this directory. Each tool should have a `main` function that accepts a target parameter and returns the results.
+This directory contains Python tools for various cybersecurity tasks.
 
-Required tools:
-- Social_Finder.py
-- endpoint_hunter.py
-- subs_Extractor.py
-- subdomain_extractor_new.py
-- sql.py
+## Available Tools:
 
-Note: Make sure all tool files are copied here from your GitHub repository.
+1. `Social_Finder.py` - Find social media profiles for a target
+2. `endpoint_hunter.py` - Discover endpoints and API paths
+3. `subs_Extractor.py` - Extract subdomains from target domains
+4. `subdomain_extractor_new.py` - Advanced subdomain discovery tool
+5. `sql.py` - SQL injection vulnerability scanner
+
+Each tool module should have a main function that accepts a target parameter and returns results.
