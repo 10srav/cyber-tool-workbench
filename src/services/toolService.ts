@@ -9,11 +9,16 @@ export interface ToolResult {
 
 export const executeToolFunction = async (toolId: string, target: string): Promise<ToolResult> => {
   try {
+    console.log(`Executing tool: ${toolId} with target: ${target}`);
+    
     const { data, error } = await supabase.functions.invoke('cyber-tools', {
       body: { toolId, target }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase function error:', error);
+      throw error;
+    }
 
     return {
       success: true,

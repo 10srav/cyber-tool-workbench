@@ -11,8 +11,9 @@ async function executePythonTool(toolId: string, target: string) {
   console.log(`Executing Python tool: ${toolId} with target: ${target}`);
   
   // Python backend API URL - update this to your actual deployed Python API URL
-  // For local development, you'll need to expose your local server via a service like ngrok
+  // The PYTHON_BACKEND_URL should be set in your Supabase Edge Function secrets
   const PYTHON_BACKEND_URL = Deno.env.get("PYTHON_BACKEND_URL") || "http://localhost:8000";
+  const PYTHON_API_KEY = Deno.env.get("PYTHON_API_KEY") || "default-key";
   
   try {
     console.log(`Sending request to ${PYTHON_BACKEND_URL}/api/tools/${toolId}`);
@@ -21,7 +22,7 @@ async function executePythonTool(toolId: string, target: string) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Deno.env.get("PYTHON_API_KEY") || "default-key"}`
+        'Authorization': `Bearer ${PYTHON_API_KEY}`
       },
       body: JSON.stringify({ target })
     });
@@ -42,6 +43,7 @@ async function executePythonTool(toolId: string, target: string) {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }

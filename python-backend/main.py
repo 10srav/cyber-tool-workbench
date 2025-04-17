@@ -1,12 +1,10 @@
 
 from fastapi import FastAPI, HTTPException, Depends, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-import subprocess
 import os
 import json
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
-import sys
 import importlib.util
 
 app = FastAPI(title="Cyber Tools API")
@@ -87,7 +85,7 @@ async def execute_tool(
         tool_name = tool_mapping[tool_id]
         tool_module = import_tool(tool_name)
         
-        # Execute the main function of the tool
+        # Execute the appropriate function of the tool
         if hasattr(tool_module, 'main'):
             result = tool_module.main(target)
         elif hasattr(tool_module, 'extract_social_links') and tool_id == 'social_finder':
