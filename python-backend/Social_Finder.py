@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -107,7 +108,7 @@ def extract_social_links(input_target):
 
     if not subdomains:
         print(Fore.RED + "No valid targets to process.")
-        return
+        return []
 
     all_social_links = set()
 
@@ -131,5 +132,7 @@ def extract_social_links(input_target):
         for platform, link in all_social_links:
             print(Fore.CYAN + f"{platform}: {link}")
         save_social_links(all_social_links, output_file)
+        return list(all_social_links)
     else:
         print(Fore.RED + "No social media links found.")
+        return []

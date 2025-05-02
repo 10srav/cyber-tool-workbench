@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -56,14 +57,3 @@ def run_sql_tool(input_target):
     except Exception as e:
         print(Fore.RED + f"Tool error: {str(e)}")
         raise
-
-# Maintain original functionality if run directly
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", required=True)
-    args = parser.parse_args()
-    
-    results = run_sql_tool(args.input)
-    for result in results:
-        print(result)

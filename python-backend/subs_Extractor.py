@@ -1,3 +1,4 @@
+
 import requests
 import re
 from urllib.parse import urlparse
@@ -7,7 +8,7 @@ import time
 
 init(autoreset=True)
 
-def extract_subdomains_alt(input_target):
+def extract_subdomains(input_target):
     """Alternative subdomain extractor function for API integration"""
     try:
         # Initialize results
@@ -53,14 +54,3 @@ def extract_subdomains_alt(input_target):
     except Exception as e:
         print(Fore.RED + f"Tool error: {str(e)}")
         raise
-
-# Maintain original functionality if run directly
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", required=True)
-    args = parser.parse_args()
-    
-    results = extract_subdomains_alt(args.input)
-    for subdomain in results:
-        print(subdomain)

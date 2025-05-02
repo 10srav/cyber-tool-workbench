@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
@@ -63,14 +64,3 @@ def find_endpoints(input_target):
     except Exception as e:
         print(Fore.RED + f"Tool error: {str(e)}")
         raise
-
-# Maintain original functionality if run directly
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", required=True)
-    args = parser.parse_args()
-    
-    results = find_endpoints(args.input)
-    for endpoint in results:
-        print(endpoint)
